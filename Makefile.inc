@@ -10,7 +10,7 @@ CPPFLAGS ?= -I ./ -I $(TOPDIR)/dts \
 	 -I $(TOPDIR)/include/dt-bindings/input \
 	 -nostdinc -undef -D__DTS__ -x assembler-with-cpp
 DTC ?= dtc
-DTCFLAGS ?= -q
+DTCFLAGS ?= -q -@
 FDTDUMP ?= fdtdump
 YAMLDT ?= yamldt
 DTS2YAML ?= dts2yaml
