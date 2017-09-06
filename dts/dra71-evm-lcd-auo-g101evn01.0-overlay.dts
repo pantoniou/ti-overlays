@@ -1,0 +1,37 @@
+/dts-v1/;
+/plugin/;
+
+#include <dt-bindings/interrupt-controller/irq.h>
+#include <dt-bindings/gpio/gpio.h>
+
+/ {
+    fragment@1 {
+        target-path = "/";
+        __overlay__ {
+            model = "TI DRA71 EVM-LCD-AUO-Display";
+        };
+    };
+    fragment@2 {
+        target = <&dss_port>;
+        __overlay__ {
+            reg = <2>;
+        };
+    };
+    fragment@3 {
+        target = <&pcf_gpio_21>;
+        __overlay__ {
+            p0 {
+                gpio-hog;
+                gpios = <0 GPIO_ACTIVE_HIGH>;
+                output-low;
+                line-name = "sel_gpmc_ad_vid_s0";
+            };
+            p7 {
+                gpio-hog;
+                gpios = <7 GPIO_ACTIVE_HIGH>;
+                output-high;
+                line-name = "sel_gpmc_ad_vid_s2";
+            };
+        };
+    };
+};

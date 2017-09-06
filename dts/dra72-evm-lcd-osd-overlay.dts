@@ -1,0 +1,14 @@
+/dts-v1/;
+/plugin/;
+
+#include <dt-bindings/interrupt-controller/irq.h>
+
+/ {
+    fragment@1 {
+        target = <&touchscreen>;
+        __overlay__ {
+            interrupt-parent = <&gpio1>;
+            interrupts = <15 IRQ_TYPE_EDGE_FALLING>;
+        };
+    };
+};

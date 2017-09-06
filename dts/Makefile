@@ -1,33 +1,5 @@
 TOPDIR ?= ..
 
-BOARDS := \
-	am571x-idk.dts \
-	am571x-idk-lcd-osd101t2587.dts \
-	am571x-idk-lcd-osd.dts \
-	am571x-idk-pru-excl-uio.dts \
-	am572x-idk.dts \
-	am572x-idk-lcd-osd101t2587.dts \
-	am572x-idk-lcd-osd.dts \
-	am572x-idk-pru-excl-uio.dts \
-	am57xx-beagle-x15.dts \
-	am57xx-beagle-x15-revb1.dts \
-	am57xx-evm.dts \
-	am57xx-evm-reva3.dts \
-	am57xx-evm-reva3-no-cmem.dts \
-	dra71-evm.dts \
-	dra71-evm-lcd-auo-g101evn01.0.dts \
-	dra72-evm.dts \
-	dra72-evm-lcd-lg.dts \
-	dra72-evm-lcd-osd101t2587.dts \
-	dra72-evm-lcd-osd.dts \
-	dra72-evm-revc.dts \
-	dra72-evm-revc-lcd-osd101t2045.dts \
-	dra72-evm-revc-lcd-osd101t2587.dts \
-	dra7-evm.dts \
-	dra7-evm-lcd-lg.dts \
-	dra7-evm-lcd-osd101t2587.dts \
-	dra7-evm-lcd-osd.dts
-
 DRA71_EVM_BASE_BOARD := dra71-evm
 DRA71_EVM_LCDS := lcd-auo-g101evn01.0
 
@@ -46,36 +18,43 @@ AM571X_IDK_LCDS := lcd-osd101t2587 lcd-osd
 AM572X_IDK_BASE_BOARD := am571x-idk
 AM572X_IDK_LCDS := lcd-osd101t2587 lcd-osd
 
-LCD_BOARDS := DRA71_EVM DRA72_EVM DRA72_EVM_REVC DRA7_EVM AM571X_IDK AM572X_IDK
+# Get all boards variables from finding out which end in _BASE_BOARD
+BASE_BOARD_NAMES := $(sort $(patsubst %_BASE_BOARD, %, \
+		    $(filter %_BASE_BOARD, $(.VARIABLES))))
 
-BASE_LCD_BOARDS := $(sort $(foreach b, $(LCD_BOARDS), $(value $(b)_BASE_BOARD)))
-BASE_LCD_BOARDS_DTBS := $(sort $(foreach b, $(BASE_LCD_BOARDS), $(b).dtb))
+# Get all boards
+BASE_BOARDS := $(sort $(foreach b, $(BASE_BOARD_NAMES), $(value $(b)_BASE_BOARD)))
+BASE_BOARD_DTBS := $(sort $(foreach b, $(BASE_BOARDS), $(b).dtb))
 
-LCDS := $(sort $(foreach b, $(LCD_BOARDS), $(value $(b)_LCDS)))
-LCD_DTBOS := $(sort $(foreach b, $(LCDS), $(b).dtbo))
+LCDS := $(sort $(foreach b, $(BASE_BOARD_NAMES), $(value $(b)_LCDS)))
+LCD_DTBS := $(sort $(foreach b, $(LCDS), $(b).dtbo))
 
-LCD_BOARDS_TEST := $(sort $(foreach b, $(LCD_BOARDS), \
+LCD_BOARD_NAMES := $(sort $(foreach b, $(BASE_BOARD_NAMES), \
 			$(foreach l, $(value $(b)_LCDS), \
 				$(value $(b)_BASE_BOARD)-$(l))))
-LCD_BOARDS_TEST_DTBS := $(sort $(foreach b, $(LCD_BOARDS_TEST), $(b).dtb))
+LCD_BOARD_DTBS := $(sort $(foreach b, $(LCD_BOARD_NAMES), $(b)-overlay.dtb))
 
-DTBS := $(BASE_LCD_BOARDS_DTBS) $(LCD_BOARDS_TEST_DTBS)
-DTBOS := $(LCD_DTBOS)
+ALL_DTBS := $(BASE_BOARD_DTBS) $(LCD_BOARD_DTBS)
 
-$(info LCD_BOARDS=$(LCD_BOARDS))
-$(info BASE_LCD_BOARDS_DTBS=$(BASE_LCD_BOARDS_DTBS))
-$(info LCDS=$(LCDS))
-$(info LCD_DTBOS=$(LCD_DTBOS))
-$(info $(F))
-$(info LCD_BOARDS_TEST=$(LCD_BOARDS_TEST))
+# $(info BASE_BOARD_NAMES = $(BASE_BOARD_NAMES))
+# $(info BASE_BOARD_DTBS  = $(BASE_BOARD_DTBS))
+# $(info LCDS             = $(LCDS))
+# $(info LCD_DTBS         = $(LCD_DTBS))
+# $(info LCD_BOARD_DTBS   = $(LCD_BOARD_DTBS))
+# $(info ALL_DTBS         = $(ALL_DTBS))
 
-all: $(DTBS)
+all: $(ALL_DTBS)
 
 include $(TOPDIR)/Makefile.inc
 
-.PHONY: test
+.PHONY: info
 
-test:
-	@echo nothing
+info:
+	@echo "BASE_BOARD_NAMES = $(BASE_BOARD_NAMES)"
+	@echo "BASE_BOARD_DTBS  = $(BASE_BOARD_DTBS)"
+	@echo "LCDS             = $(LCDS)"
+	@echo "LCD_DTBS         = $(LCD_DTBS)"
+	@echo "LCD_BOARD_DTBS   = $(LCD_BOARD_DTBS)"
+	@echo "ALL_DTBS         = $(ALL_DTBS)"
 
 
