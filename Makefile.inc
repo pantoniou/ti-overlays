@@ -68,8 +68,8 @@ BLACKDIFFS    := $(addsuffix .diff, $(BLACKLIST))
 check: $(DIFFS)
 
 clean:
-	rm -f $(DIFFS) $(FDTDUMPS) $(CPPS) $(YAMLS)
-	rm -f $(DIFFS) $(DTBS) $(YAMLDTBS) $(FDTDUMPS) $(CPPS) $(YAMLS)
+	find ./ -name '*.diff' -print | xargs rm -f
+	find ./ -name '*.fdtdump' -print | xargs rm -f
 	find ./ -name '*.dtb' -print | xargs rm -f
 	find ./ -name '*.yaml' -print | xargs rm -f
 	find ./ -name '*.yamli' -print | xargs rm -f

@@ -1,0 +1,38 @@
+/ {
+    fragment@201 {
+        target = <&cpu_alert0>;
+        __overlay__ {
+            temperature = <90000>;
+        };
+    };
+    fragment@202 {
+        target = <&cpu_crit>;
+        __overlay__ {
+            temperature = <105000>;
+        };
+    };
+    fragment@203 {
+        target = <&gpu_crit>;
+        __overlay__ {
+            temperature = <105000>;
+        };
+    };
+    fragment@204 {
+        target = <&core_crit>;
+        __overlay__ {
+            temperature = <105000>;
+        };
+    };
+    fragment@205 {
+        target = <&dspeve_crit>;
+        __overlay__ {
+            temperature = <105000>;
+        };
+    };
+    fragment@206 {
+        target = <&iva_crit>;
+        __overlay__ {
+            temperature = <105000>;
+        };
+    };
+};
