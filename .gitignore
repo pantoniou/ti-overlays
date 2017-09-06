@@ -1,0 +1,6 @@
+*.yaml
+*.yamli
+*.diff
+*.fdtdump
+*.dtb
+*.dtbo
