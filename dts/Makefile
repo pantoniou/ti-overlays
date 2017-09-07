@@ -1,5 +1,17 @@
 TOPDIR ?= ..
 
+# convert from lower-case (with punct) to upper with punct -> _
+define TOVAR
+$(shell echo $(1) | tr '[:lower:]' '[:upper:]' | tr '[:punct:]' _)
+endef
+
+define OVERLAY_TEST_RULE
+$(strip $(1))-test.dtb: $(strip $(2)).dtb $(strip $(foreach o, $(3), $(o)-overlay.dtb))
+	@echo "target: $(strip $1)-test.dtb"
+	@echo "  base: $(strip $(2)).dtb"
+	@echo " overl: $(strip $(foreach o, $(3), $(o)-overlay.dtb))"
+endef
+
 DRA71_EVM_BASE_BOARD := dra71-evm
 DRA71_EVM_LCDS := lcd-auo-g101evn01.0
 
@@ -14,7 +26,7 @@ DRA7_EVM_LCDS := lcd-lg lcd-osd101t2587 lcd-osd
 AM571X_IDK_BASE_BOARD := am571x-idk
 AM571X_IDK_LCDS := lcd-osd101t2587 lcd-osd
 
-AM572X_IDK_BASE_BOARD := am571x-idk
+AM572X_IDK_BASE_BOARD := am572x-idk
 AM572X_IDK_LCDS := lcd-osd101t2587 lcd-osd
 
 AM57XX_BEAGLE_X15_BASE_BOARD := am57xx-beagle-x15
@@ -36,9 +48,7 @@ REV_BOARDS := $(sort $(foreach b, $(BASE_BOARD_NAMES), \
 			$(foreach l, $(value $(b)_REVS), $(l))))
 REV_BOARD_DTBS := $(sort $(foreach b, $(REV_BOARDS), $(b)-overlay.dtb))
 
-REV_BOARD_NAMES := $(sort $(foreach b, $(REV_BOARDS), \
-			$(shell echo $(b) | tr '[:lower:]' '[:upper:]' | \
-				tr '[:punct:]' _ )))
+REV_BOARD_NAMES := $(sort $(foreach b, $(REV_BOARDS), $(call TOVAR, $(b))))
 
 # Get the names of the lcds from each $(BOARD)_LCDS
 BASE_LCDS := $(sort $(foreach b, $(BASE_BOARD_NAMES), $(value $(b)_LCDS)))
@@ -50,13 +60,12 @@ LCD_BASE_BOARDS := $(sort $(foreach b, $(BASE_BOARD_NAMES), \
 			$(foreach l, $(value $(b)_LCDS), \
 				$(value $(b)_BASE_BOARD)-$(l))))
 LCD_REV_BOARDS := $(sort $(foreach b, $(REV_BOARDS), \
-			$(foreach l, \
-				$(value $(shell echo $(b) | \
-					tr '[:lower:]' '[:upper:]' | \
-					tr '[:punct:]' _ )_LCDS), \
+			$(foreach l, $(value $(call TOVAR, $(b))_LCDS), \
 					$(b)-$(l))))
 LCD_BOARDS := $(sort $(LCD_BASE_BOARDS) $(LCD_REV_BOARDS))
 LCD_BOARD_DTBS := $(sort $(foreach b, $(LCD_BOARDS), $(b)-overlay.dtb))
+
+REV_BOARDS_TEST := $(sort $(foreach b, $(REV_BOARDS), $(b)-test.dtb))
 
 ALL_DTBS := $(BASE_BOARD_DTBS) $(REV_BOARD_DTBS) $(LCD_BOARD_DTBS)
 
@@ -72,6 +81,37 @@ all: $(ALL_DTBS)
 
 include $(TOPDIR)/Makefile.inc
 
+# REVs on top of base boards
+$(foreach b, $(BASE_BOARD_NAMES), \
+	$(foreach r, $(value $(b)_REVS), \
+		$(eval $(call OVERLAY_TEST_RULE, $(r), \
+			$(value $(b)_BASE_BOARD), $(r)) \
+		 ) \
+	 )\
+ )
+
+# LCDs on base boards
+$(foreach b, $(BASE_BOARD_NAMES), \
+	$(foreach l, $(value $(b)_LCDS), \
+		$(eval $(call OVERLAY_TEST_RULE, \
+			$(value $(b)_BASE_BOARD)-$(l), \
+			$(value $(b)_BASE_BOARD), \
+			$(value $(b)_BASE_BOARD)-$(l)) \
+		 ) \
+	 ) \
+ )
+
+# LCDs on top of rev boards
+$(foreach b, $(BASE_BOARD_NAMES), \
+	$(foreach r, $(value $(b)_REVS), \
+		$(foreach l, $(value $(call TOVAR, $(r))_LCDS), \
+			$(eval $(call OVERLAY_TEST_RULE, $(r)-$(l), \
+				$(value $(b)_BASE_BOARD), $(r) $(r)-$(l)) \
+			 ) \
+		 ) \
+	 ) \
+ )
+
 .PHONY: info
 
 info:
@@ -86,6 +126,5 @@ info:
 	@echo "LCD_REV_BOARDS   = $(LCD_REV_BOARDS)"
 	@echo "LCD_BOARDS       = $(LCD_BOARDS)"
 	@echo "LCD_BOARD_DTBS   = $(LCD_BOARD_DTBS)"
+	@echo "REV_BOARDS_TEST  = $(REV_BOARDS_TEST)"
 	@echo "ALL_DTBS         = $(ALL_DTBS)"
-
-
