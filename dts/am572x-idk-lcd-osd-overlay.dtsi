@@ -1,0 +1,29 @@
+#include <dt-bindings/interrupt-controller/irq.h>
+
+/ {
+    fragment@201 {
+        target-path = "/";
+        __overlay__ {
+	    model = "TI AM572x IDK-LCD-OSD-Display";
+        };
+    };
+#if 0
+    fragment@202 {
+        target = <&touchscreen>;
+        __overlay__ {
+            interrupt-parent = <&gpio3>;
+            interrupts = <14 IRQ_TYPE_EDGE_FALLING>;
+        };
+    };
+#else
+    fragment@202 {
+        target = <&i2c1>;
+        __overlay__ {
+            edt-ft5506@38 {
+                interrupt-parent = <&gpio3>;
+                interrupts = <14 IRQ_TYPE_EDGE_FALLING>;
+	    };
+        };
+    };
+#endif
+};

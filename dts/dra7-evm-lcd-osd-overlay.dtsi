@@ -1,0 +1,13 @@
+#include <dt-bindings/interrupt-controller/irq.h>
+
+/ {
+    fragment@201 {
+        target = <&i2c1>;
+        __overlay__ {
+            edt-ft5506@38 {
+                interrupt-parent = <&gpio1>;
+                interrupts = <2 IRQ_TYPE_EDGE_FALLING>;
+	    };
+        };
+    };
+};

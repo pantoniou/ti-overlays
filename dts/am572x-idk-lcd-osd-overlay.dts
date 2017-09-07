@@ -3,18 +3,5 @@
 
 #include <dt-bindings/interrupt-controller/irq.h>
 
-/ {
-    fragment@1 {
-        target-path = "/";
-        __overlay__ {
-            model = "TI AM572x IDK-LCD-OSD-Display";
-        };
-    };
-    fragment@2 {
-        target = <&touchscreen>;
-        __overlay__ {
-            interrupt-parent = <&gpio3>;
-            interrupts = <14 IRQ_TYPE_EDGE_FALLING>;
-        };
-    };
-};
+#include "am57xx-idk-lcd-osd-overlay.dtsi"
+#include "am572x-idk-lcd-osd-overlay.dtsi"

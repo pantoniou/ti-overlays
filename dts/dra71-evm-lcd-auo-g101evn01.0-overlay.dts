@@ -4,6 +4,8 @@
 #include <dt-bindings/interrupt-controller/irq.h>
 #include <dt-bindings/gpio/gpio.h>
 
+#include "dra7x-evm-lcd-auo-g101evn01.0-overlay.dtsi"
+
 / {
     fragment@1 {
         target-path = "/";

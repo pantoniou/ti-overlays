@@ -1,10 +1,25 @@
 /dts-v1/;
 /plugin/;
+
+#include "dra7x-evm-lcd-osd-overlay.dtsi"
+#include "dra7-evm-lcd-osd-overlay.dtsi"
+
 / {
+#if 0
     fragment@1 {
         target = <&lcd>;
         __overlay__ {
             #include "lcd-osd101t2587.dtsi"
         };
     };
+#else
+    fragment@1 {
+        target-path = "/";
+        __overlay__ {
+            display {
+                #include "lcd-osd101t2587.dtsi"
+	    };
+        };
+    };
+#endif
 };

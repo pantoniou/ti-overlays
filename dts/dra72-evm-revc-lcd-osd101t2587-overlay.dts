@@ -3,7 +3,10 @@
 
 #include <dt-bindings/interrupt-controller/irq.h>
 
+#include "dra7x-evm-lcd-osd-overlay.dtsi"
+
 / {
+#if 0
     fragment@1 {
         target = <&touchscreen>;
         __overlay__ {
@@ -11,10 +14,32 @@
             interrupts = <15 IRQ_TYPE_EDGE_FALLING>;
         };
     };
+#else
+    fragment@1 {
+        target = <&i2c1>;
+        __overlay__ {
+            edt-ft5506@38 {
+                interrupt-parent = <&gpio1>;
+                interrupts = <15 IRQ_TYPE_EDGE_FALLING>;
+	    };
+        };
+    };
+#endif
+#if 0
     fragment@2 {
         target = <&lcd>;
         __overlay__ {
             #include "lcd-osd101t2587.dtsi"
         };
     };
+#else
+    fragment@2 {
+        target-path = "/";
+        __overlay__ {
+            display {
+                #include "lcd-osd101t2587.dtsi"
+	    };
+        };
+    };
+#endif
 };

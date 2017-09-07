@@ -1,10 +1,27 @@
 /dts-v1/;
 /plugin/;
+
+#include <dt-bindings/interrupt-controller/irq.h>
+
+#include "am57xx-idk-lcd-osd-overlay.dtsi"
+#include "am571x-idk-lcd-osd-overlay.dtsi"
+
 / {
+#if 0
     fragment@1 {
         target = <&lcd>;
         __overlay__ {
             #include "lcd-osd101t2587.dtsi"
         };
     };
+#else
+    fragment@1 {
+        target-path = "/";
+        __overlay__ {
+            display {
+                #include "lcd-osd101t2587.dtsi"
+	    };
+        };
+    };
+#endif
 };

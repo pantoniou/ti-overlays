@@ -14,6 +14,7 @@ DTCFLAGS ?= -q -@
 FDTDUMP ?= fdtdump
 YAMLDT ?= yamldt
 DTS2YAML ?= dts2yaml
+FDTOVERLAY ?= fdtoverlay
 
 # pass extra validate flags
 YAMLDTFLAGS ?= -C \

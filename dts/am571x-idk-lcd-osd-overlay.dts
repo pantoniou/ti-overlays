@@ -1,55 +1,5 @@
 /dts-v1/;
 /plugin/;
 
-#include <dt-bindings/interrupt-controller/irq.h>
-
-/ {
-    fragment@1 {
-        target-path = "/";
-        __overlay__ {
-            model = "TI AM571x IDK-LCD-OSD-Display";
-            /* path-refs not supported for overlays */
-            /* aliases {
-                ethernet2 = &pruss2_emac0;
-                ethernet3 = &pruss2_emac1;
-            }; */
-        };
-    };
-    fragment@2 {
-        target = <&touchscreen>;
-        __overlay__ {
-            interrupt-parent = <&gpio5>;
-            interrupts = <6 IRQ_TYPE_EDGE_FALLING>;
-        };
-    };
-    fragment@3 {
-        target = <&pruss1_mdio>;
-        __overlay__ {
-            status = "disabled";
-        };
-    };
-    fragment@4 {
-        target = <&pruss1_eth>;
-        __overlay__ {
-            status = "disabled";
-        };
-    };
-    fragment@5 {
-        target = <&pru1_1>;
-        __overlay__ {
-            ti,pruss-gp-mux-sel;	/* note that the driver must be capable of handling this */
-        };
-    };
-    fragment@6 {
-        target = <&pru2_0>;
-        __overlay__ {
-            ti,pruss-gp-mux-sel;	/* note that the driver must be capable of handling this */
-        };
-    };
-    fragment@7 {
-        target = <&pru2_1>;
-        __overlay__ {
-            ti,pruss-gp-mux-sel;	/* note that the driver must be capable of handling this */
-        };
-    };
-};
+#include "am57xx-idk-lcd-osd-overlay.dtsi"
+#include "am571x-idk-lcd-osd-overlay.dtsi"

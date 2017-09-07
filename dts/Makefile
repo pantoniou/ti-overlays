@@ -7,9 +7,9 @@ endef
 
 define OVERLAY_TEST_RULE
 $(strip $(1))-test.dtb: $(strip $(2)).dtb $(strip $(foreach o, $(3), $(o)-overlay.dtb))
-	@echo "target: $(strip $1)-test.dtb"
-	@echo "  base: $(strip $(2)).dtb"
-	@echo " overl: $(strip $(foreach o, $(3), $(o)-overlay.dtb))"
+	$(FDTOVERLAY) -i $(strip $(2)).dtb \
+		      -o $(strip $(1))-test.dtb \
+		      $(strip $(foreach o, $(3), $(o)-overlay.dtb))
 endef
 
 DRA71_EVM_BASE_BOARD := dra71-evm
@@ -81,12 +81,15 @@ all: $(ALL_DTBS)
 
 include $(TOPDIR)/Makefile.inc
 
+TEST_DTBS := 
+
 # REVs on top of base boards
 $(foreach b, $(BASE_BOARD_NAMES), \
 	$(foreach r, $(value $(b)_REVS), \
 		$(eval $(call OVERLAY_TEST_RULE, $(r), \
 			$(value $(b)_BASE_BOARD), $(r)) \
 		 ) \
+		 $(eval TEST_DTBS += $(r)-test.dtb) \
 	 )\
  )
 
@@ -98,6 +101,7 @@ $(foreach b, $(BASE_BOARD_NAMES), \
 			$(value $(b)_BASE_BOARD), \
 			$(value $(b)_BASE_BOARD)-$(l)) \
 		 ) \
+		 $(eval TEST_DTBS += $(value $(b)_BASE_BOARD)-$(l)-test.dtb) \
 	 ) \
  )
 
@@ -108,9 +112,14 @@ $(foreach b, $(BASE_BOARD_NAMES), \
 			$(eval $(call OVERLAY_TEST_RULE, $(r)-$(l), \
 				$(value $(b)_BASE_BOARD), $(r) $(r)-$(l)) \
 			 ) \
+			$(eval TEST_DTBS += $(r)-$(l)-test.dtb) \
 		 ) \
 	 ) \
  )
+
+.PHONY: test
+
+test: $(TEST_DTBS)
 
 .PHONY: info
 
@@ -128,3 +137,4 @@ info:
 	@echo "LCD_BOARD_DTBS   = $(LCD_BOARD_DTBS)"
 	@echo "REV_BOARDS_TEST  = $(REV_BOARDS_TEST)"
 	@echo "ALL_DTBS         = $(ALL_DTBS)"
+	@echo "TEST_DTBS        = $(TEST_DTBS)"
