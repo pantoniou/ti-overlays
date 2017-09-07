@@ -18,7 +18,10 @@ AM572X_IDK_BASE_BOARD := am571x-idk
 AM572X_IDK_LCDS := lcd-osd101t2587 lcd-osd
 
 AM57XX_BEAGLE_X15_BASE_BOARD := am57xx-beagle-x15
-AM57XX_BEAGLE_X15_REVS := am57xx-beagle-x15-revb1 am57xx-evm am57xx-evm-reva3
+AM57XX_BEAGLE_X15_REVS := am57xx-evm am57xx-evm-reva3
+
+# This is not based on -x15 as expected
+AM57XX_BEAGLE_X15_REVB1_BASE_BOARD := am57xx-beagle-x15-revb1
 
 # Get all boards variables from finding out which end in _BASE_BOARD
 BASE_BOARD_NAMES := $(sort $(patsubst %_BASE_BOARD, %, \

@@ -10,6 +10,7 @@
             model = "TI AM5728 BeagleBoard-X15 rev B1";
         };
     };
+
     fragment@2 {
         target = <&tpd12s015>;
         __overlay__ {
