@@ -6,10 +6,8 @@
         __overlay__ {
             aliases {
 	        /* overlays don't support path-refs */
-		/*
-                display0 = &lcd;
-                display1 = &hdmi0;
-		*/
+                display0 = "/display";		/* &lcd */
+		display1 = "/connector@0";	/* &hdmi0 */
             };
             lcd_bl: backlight {
                 compatible = "pwm-backlight";

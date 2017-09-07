@@ -6,12 +6,11 @@
         target-path = "/";
         __overlay__ {
 	    /* overlays do not support path-refs */
-	    /*
             aliases {
-                display0 = &lcd;
-                display1 = &hdmi0;
+		/* pathrefs not supported for overlays */
+                display0 = "/display";		/* &lcd */
+		display1 = "/connector@1";	/* &hdmi0 */
             };
-	    */
             backlight {
                 compatible = "led-backlight";
                 leds = <&backlight_led>;

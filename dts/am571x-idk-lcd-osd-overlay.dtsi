@@ -5,11 +5,11 @@
         target-path = "/";
         __overlay__ {
             model = "TI AM571x IDK-LCD-OSD-Display";
-            /* path-refs not supported for overlays */
-            /* aliases {
-                ethernet2 = &pruss2_emac0;
-                ethernet3 = &pruss2_emac1;
-            }; */
+	    aliases {
+                /* path-refs not supported for overlays */
+                ethernet2 = "/pruss2_eth/ethernet-mii0"; /* &pruss2_emac0 */
+                ethernet3 = "/pruss2_eth/ethernet-mii1"; /* &pruss2_emac1 */
+	    };
         };
     };
 #if 0
