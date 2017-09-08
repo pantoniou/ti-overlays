@@ -1,7 +1,7 @@
 # Makefile for yamldl test-suite
 TOPDIR ?= $(realpath .)
 
-TOPTARGETS := clean check validate genyamls
+TOPTARGETS := clean test
 
 SUBDIRS := dts
 
