@@ -51,19 +51,34 @@
     fragment@205 {
         target = <&pru1_1>;
         __overlay__ {
-            ti,pruss-gp-mux-sel;	/* note that the driver must be capable of handling this */
+            /* The driver must be capable of handling this.
+	     * The original dtsi file deleted that property; but overlays
+	     * do not support property deletion; so we're setting this
+	     * as a boolean
+	     */
+            ti,pruss-gp-mux-sel;
         };
     };
     fragment@206 {
         target = <&pru2_0>;
         __overlay__ {
-            ti,pruss-gp-mux-sel;	/* note that the driver must be capable of handling this */
+            /* The driver must be capable of handling this.
+	     * The original dtsi file deleted that property; but overlays
+	     * do not support property deletion; so we're setting this
+	     * as a boolean
+	     */
+            ti,pruss-gp-mux-sel;
         };
     };
     fragment@207 {
         target = <&pru2_1>;
         __overlay__ {
-            ti,pruss-gp-mux-sel;	/* note that the driver must be capable of handling this */
+            /* The driver must be capable of handling this.
+	     * The original dtsi file deleted that property; but overlays
+	     * do not support property deletion; so we're setting this
+	     * as a boolean
+	     */
+            ti,pruss-gp-mux-sel;
         };
     };
 };
