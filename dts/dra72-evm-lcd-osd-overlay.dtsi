@@ -1,13 +1,20 @@
 / {
-#if 0
-    fragment@201 {
-        target = <&touchscreen>;
-        __overlay__ {
-            interrupt-parent = <&gpio1>;
-            interrupts = <15 IRQ_TYPE_EDGE_FALLING>;
-        };
-    };
-#else
+    /*
+     * Original was:
+     *
+     * fragment@201 {
+     *    target = <&touchscreen>;
+     *    __overlay__ {
+     *        interrupt-parent = <&gpio1>;
+     *        interrupts = <15 IRQ_TYPE_EDGE_FALLING>;
+     *    };
+     * };
+     *
+     * Changed because an overlay can not have a target
+     * defined in itself; the dtsi files do not have that
+     * problem.
+     */
+
     fragment@201 {
         target = <&i2c1>;
         __overlay__ {
@@ -17,5 +24,4 @@
 	    };
         };
     };
-#endif
 };

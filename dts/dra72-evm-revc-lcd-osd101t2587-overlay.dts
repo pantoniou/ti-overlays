@@ -6,15 +6,26 @@
 #include "dra7x-evm-lcd-osd-overlay.dtsi"
 
 / {
-#if 0
-    fragment@1 {
-        target = <&touchscreen>;
-        __overlay__ {
-            interrupt-parent = <&gpio1>;
-            interrupts = <15 IRQ_TYPE_EDGE_FALLING>;
-        };
-    };
-#else
+    /* Original was:
+     *
+     * fragment@1 {
+     *    target = <&touchscreen>;
+     *    __overlay__ {
+     *        interrupt-parent = <&gpio1>;
+     *        interrupts = <15 IRQ_TYPE_EDGE_FALLING>;
+     *    };
+     * };
+     * fragment@2 {
+     *    target = <&lcd>;
+     *    __overlay__ {
+     *        #include "lcd-osd101t2587.dtsi"
+     *    };
+     * };
+     *
+     * Changed because an overlay can not have a target
+     * defined in itself; the dtsi files do not have that
+     * problem.
+     */
     fragment@1 {
         target = <&i2c1>;
         __overlay__ {
@@ -24,15 +35,6 @@
 	    };
         };
     };
-#endif
-#if 0
-    fragment@2 {
-        target = <&lcd>;
-        __overlay__ {
-            #include "lcd-osd101t2587.dtsi"
-        };
-    };
-#else
     fragment@2 {
         target-path = "/";
         __overlay__ {
@@ -41,5 +43,4 @@
 	    };
         };
     };
-#endif
 };

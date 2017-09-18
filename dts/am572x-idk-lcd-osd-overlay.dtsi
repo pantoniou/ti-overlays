@@ -7,15 +7,23 @@
 	    model = "TI AM572x IDK-LCD-OSD-Display";
         };
     };
-#if 0
-    fragment@202 {
-        target = <&touchscreen>;
-        __overlay__ {
-            interrupt-parent = <&gpio3>;
-            interrupts = <14 IRQ_TYPE_EDGE_FALLING>;
-        };
-    };
-#else
+
+    /*
+     * Original was:
+     *
+     * fragment@202 {
+     *   target = <&touchscreen>;
+     *    __overlay__ {
+     *        interrupt-parent = <&gpio3>;
+     *        interrupts = <14 IRQ_TYPE_EDGE_FALLING>;
+     *    };
+     * };
+     *
+     * Changed because an overlay can not have a target
+     * defined in itself; the dtsi files do not have that
+     * problem.
+     */
+
     fragment@202 {
         target = <&i2c1>;
         __overlay__ {
@@ -25,5 +33,4 @@
 	    };
         };
     };
-#endif
 };
